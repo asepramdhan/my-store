@@ -2,5 +2,6 @@
   <x-menu activate-by-route>
     <x-menu-item title="Home" icon="o-home" :link="route('dashboard')" />
     <x-menu-item title="Products" icon="o-shopping-cart" :link="route('products')" />
+    <x-menu-item title="Categories" icon="o-tag" :link="route('category')" />
   </x-menu>
 </x-slot:sidebar>

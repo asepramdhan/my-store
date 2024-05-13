@@ -1,18 +1,19 @@
 <?php
-use function Livewire\Volt\{state, on};
+use function Livewire\Volt\{with, state, on, usesPagination};
 use function Laravel\Folio\name;
 use App\Models\Product;
+usesPagination();
+with(fn () => ['products' => Product::with('category')->paginate(10)]);
 name('products');
 state([
-  'products' => Product::all(),
   'headers' => [
     ['key' => 'id', 'label' => '#', 'class' => 'bg-red-500/20 w-1'],
-    ['key' => 'image', 'label' => 'Image'],
-    ['key' => 'name', 'label' => 'Title'],
+    ['key' => 'image', 'label' => 'Image', 'class' => 'h-20 w-full md:h-full md:w-20'],
+    ['key' => 'name', 'label' => 'Title', 'class' => 'truncate'],
+    ['key' => 'category_id', 'label' => 'Category'],
     ['key' => 'price', 'label' => 'Price'],
     ['key' => 'stock', 'label' => 'Stock'],
   ],
-  'deleteModal' => false,
 ]);
 $delete = function ($id) {
   // buat kondisi untuk menghapus gambar jika ada
@@ -37,26 +38,30 @@ on(['products' => function () {
       <x-alert title="Information" :description="session('success')" icon="o-check" shadow dismissible />
     </div>
     @endif
-    <x-table :headers="$headers" :rows="$products" striped>
+    @if($products->count() == 0)
+    <div class="text-center text-slate-500 text-xl my-52">
+      <p>There is no product</p>
+    </div>
+    @else
+    <x-table :headers="$headers" :rows="$products" striped with-pagination>
       @scope('cell_id', $product)
       <strong>{{ $this->loop->iteration }}</strong>
       @endscope
+      @scope('cell_category_id', $product)
+      {{ $product->category->name }}
+      @endscope
       @scope('cell_image', $product)
-      <img src="{{ asset('storage/' . $product->image) }}" class="h-20 rounded-lg" />
+      <img src="{{ asset('storage/' . $product->image) }}" />
       @endscope
       @scope('actions', $product)
       <div class="flex gap-2">
         <x-button icon="o-eye" class="btn-sm" link="/auth/products/show/{{ $product->slug }}" />
         <x-button icon="o-pencil" class="btn-sm" link="/auth/products/edit/{{ $product->slug }}" />
-        <x-button icon="o-trash" @click="$wire.deleteModal = true" class="btn-sm" />
+        <x-button icon="o-trash" wire:click="delete({{ $product->id }})" wire:confirm='Are you sure?' class="btn-sm" />
       </div>
-      <x-modal wire:model="deleteModal" class="backdrop-blur" class="text-center">
-        <div class="mb-5">Apakah anda yakin ingin menghapus produk ini?</div>
-        <x-button label="Cancel" @click="$wire.deleteModal = false" />
-        <x-button label="Delete" @click="$wire.deleteModal = false; $wire.delete({{ $product->id }})" />
-      </x-modal>
       @endscope
     </x-table>
+    @endif
   </div>
   @endvolt
 </x-dashboard-layout>

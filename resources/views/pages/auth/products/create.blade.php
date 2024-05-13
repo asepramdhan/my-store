@@ -3,13 +3,15 @@ use function Livewire\Volt\{state, rules, updated, usesFileUploads};
 use function Laravel\Folio\name;
 use Illuminate\Support\Str;
 use App\Models\Product;
+use App\Models\Category;
 name('products.create');
 usesFileUploads();
-state(['image', 'name', 'slug', 'description', 'price', 'stock']);
+state(['image', 'name', 'slug', 'category_id' => "1", 'description', 'price', 'stock', 'categories' => Category::all()]);
 rules([
   'image' => 'image|file|max:1024',
   'name' => 'required|min:3',
   'slug' => 'required',
+  'category_id' => 'required',
   'description' => 'required',
   'price' => 'required',
   'stock' => 'required',
@@ -20,6 +22,7 @@ rules([
   'name.required' => 'Name is required',
   'name.min' => 'Name must be at least 3 characters',
   'slug.required' => 'Slug is required',
+  'category_id.required' => 'Category is required',
   'description.required' => 'Description is required',
   'price.required' => 'Price is required',
   'stock.required' => 'Stock is required',
@@ -42,6 +45,7 @@ $store = function () {
       </x-file>
       <x-input label="Name" wire:model.lazy="name" />
       <x-input label="slug" wire:model="slug" readonly />
+      <x-select label="Category" :options="$categories" wire:model="category_id" />
       <x-editor wire:model="description" label="Description" hint="The full product description" disk="public" folder="images" />
       <x-input label="Price" wire:model="price" />
       <x-input label="Stock" wire:model="stock" />

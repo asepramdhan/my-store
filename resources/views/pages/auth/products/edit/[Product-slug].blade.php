@@ -1,10 +1,12 @@
 <?php
 use function Livewire\Volt\{state, mount, rules, updated, usesFileUploads};
+use App\Models\Category;
 usesFileUploads();
-state(['product', 'image', 'name', 'slug', 'description', 'price', 'stock']);
+state(['product', 'image', 'name', 'slug', 'category_id', 'description', 'price', 'stock', 'categories' => Category::all()]);
 mount(function () {
   $this->name = $this->product->name;
   $this->slug = $this->product->slug;
+  $this->category_id = $this->product->category_id;
   $this->description = $this->product->description;
   $this->price = $this->product->price;
   $this->stock = $this->product->stock;
@@ -12,12 +14,14 @@ mount(function () {
 rules([
   'name' => 'required|min:3',
   'slug' => 'required',
+  'category_id' => 'required',
   'description' => 'required',
   'price' => 'required',
   'stock' => 'required',
 ])->messages([
   'name.min' => 'Name must be at least 3 characters',
   'slug.required' => 'Slug is required',
+  'category_id.required' => 'Category is required',
   'description.required' => 'Description is required',
   'price.required' => 'Price is required',
   'stock.required' => 'Stock is required',
@@ -49,6 +53,7 @@ $update = function () {
       </x-file>
       <x-input label="Name" wire:model.lazy="name" />
       <x-input label="slug" wire:model="slug" readonly />
+      <x-select label="Category" :options="$categories" wire:model="category_id" />
       <x-editor wire:model="description" label="Description" hint="The full product description" disk="public" folder="images" />
       <x-input label="Price" wire:model="price" />
       <x-input label="Stock" wire:model="stock" />
