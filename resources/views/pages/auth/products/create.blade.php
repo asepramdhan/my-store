@@ -34,12 +34,19 @@ $store = function () {
   Product::create($validatedData);
   session()->flash('success', 'Product created successfully');
   $this->redirect(route('products'), navigate: true);
-}
+};
+$storeNewProduct = function () {
+  $validatedData = $this->validate();
+  $validatedData['image'] = $this->image->store('images/products');
+  Product::create($validatedData);
+  session()->flash('success', 'Product created successfully');
+  $this->reset(['name', 'slug', 'price', 'stock']);
+};
 ?>
 <x-dashboard-layout title="Create Product">
   @volt
   <div>
-    <x-form wire:submit="store">
+    <x-form>
       <x-file wire:model="image" accept="image/png, image/jpeg">
         <img src="{{ '/image/default.jpg' }}" class="h-40 rounded-lg" />
       </x-file>
@@ -52,7 +59,8 @@ $store = function () {
 
       <x-slot:actions>
         <x-button label="Cancel" :link="route('products')" />
-        <x-button label="Create" class="btn-primary" type="submit" spinner="store" />
+        <x-button label="Create & New Product" wire:click="storeNewProduct" class="btn-secondary" spinner="storeNewProduct" />
+        <x-button label="Create" wire:click="store" class="btn-primary" spinner="store" />
       </x-slot:actions>
     </x-form>
   </div>

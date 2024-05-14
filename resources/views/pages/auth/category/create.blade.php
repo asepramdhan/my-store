@@ -19,17 +19,24 @@ $store = function () {
   session()->flash('success', 'Category created successfully');
   $this->redirect(route('category'), navigate: true);
 };
+$storeNewCategory = function () {
+  $validatedData = $this->validate();
+  Category::create($validatedData);
+  session()->flash('success', 'Category created successfully');
+  $this->reset();
+};
 ?>
 <x-dashboard-layout title="Create Category">
   @volt
   <div>
-    <x-form wire:submit="store">
-      <x-input label="Name" wire:model.lazy="name" />
+    <x-form>
+      <x-input label="Name" wire:model.lazy="name" autofocus />
       <x-input label="slug" wire:model="slug" readonly />
 
       <x-slot:actions>
         <x-button label="Cancel" :link="route('category')" />
-        <x-button label="Create" class="btn-primary" type="submit" spinner="store" />
+        <x-button label="Create & New Category" wire:click="storeNewCategory" class="btn-secondary" spinner="storeNewCategory" />
+        <x-button label="Create" wire:click="store" class="btn-primary" spinner="store" />
       </x-slot:actions>
     </x-form>
   </div>
