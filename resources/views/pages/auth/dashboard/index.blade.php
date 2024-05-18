@@ -9,6 +9,9 @@ with(fn () => ['orders' => Order::all()]);
 <x-dashboard-layout>
   @volt
   <div>
+    @if(session()->has('success'))
+    <x-alert title="Information" :description="session('success')" icon="o-check" class="mb-3" dismissible />
+    @endif
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       <a href="{{ route('orders.belum-bayar') }}" wire:navigate>
         <x-stat title="Belum Bayar" :value="$orders->where('status', 0)->count()" icon="o-exclamation-circle" tooltip-bottom="Belum Bayar" class="drop-shadow-md bg-slate-200 py-12" />
