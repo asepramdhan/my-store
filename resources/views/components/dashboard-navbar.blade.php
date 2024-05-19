@@ -9,12 +9,14 @@ $logout = function () {
 ?>
 <div>
   @volt
-  <x-nav sticky full-width>
+  <x-nav class="bg-neutral text-neutral-content" sticky full-width>
     <x-slot:brand>
       <label for="main-drawer" class="lg:hidden mr-3">
         <x-icon name="o-bars-3" class="cursor-pointer" />
       </label>
-      <div>My Store</div>
+      <div>
+        <a href="{{ route('dashboard') }}" wire:navigate>Seller App</a>
+      </div>
     </x-slot:brand>
     <x-slot:actions>
       <x-button wire:click="logout" label="Logout" icon-right="o-arrow-right-on-rectangle" class="btn-ghost btn-sm" responsive />

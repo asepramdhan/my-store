@@ -53,6 +53,9 @@ on(['products' => function () {
       @scope('cell_image', $product)
       <img src="{{ asset('storage/' . $product->image) }}" />
       @endscope
+      @scope('cell_price', $product)
+      {{ number_format($product->price) }}
+      @endscope
       @scope('actions', $product)
       <div class="flex gap-2">
         <x-button icon="o-eye" class="btn-sm" link="/auth/products/show/{{ $product->slug }}" />

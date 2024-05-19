@@ -19,6 +19,8 @@ $login = function () {
     Auth::login($user);
     session()->flash('success', 'User logged in successfully');
     $this->redirect(route('dashboard'), navigate: true);
+  } else {
+    session()->flash('error', 'Invalid email or password');
   }
 }
 ?>
@@ -28,6 +30,9 @@ $login = function () {
     <div class="col-start-1 col-span-12 md:col-span-4 md:col-start-4">
       @if(session()->has('success'))
       <x-alert title="Information" :description="session('success')" icon="o-check" class="mb-3" dismissible />
+      @endif
+      @if(session()->has('error'))
+      <x-alert title="Information" :description="session('error')" icon="o-exclamation-triangle" class="mb-3 alert-error" dismissible />
       @endif
       <x-form wire:submit="login">
         <x-input label="Email" type="email" wire:model="email" />
