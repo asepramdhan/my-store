@@ -24,4 +24,9 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+    // relasi ke shipment
+    public function shipment()
+    {
+        return $this->belongsTo(Shipment::class);
+    }
 }

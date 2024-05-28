@@ -17,8 +17,13 @@ $login = function () {
   $user = User::where('email', $validatedData['email'])->first();
   if ($user && Hash::check($validatedData['password'], $user->password)) {
     Auth::login($user);
-    session()->flash('success', 'User logged in successfully');
-    $this->redirect(route('dashboard'), navigate: true);
+    // buat kondisi untuk redirect, jika usernya admin maka redirect ke dashboard, jika bukan admin maka redirect ke home
+    if ($user->is_admin === 1) {
+      session()->flash('success', 'User logged in successfully');
+      $this->redirect(route('dashboard'), navigate: true);
+    } else {
+      $this->redirect(route('home'), navigate: true);
+    }
   } else {
     session()->flash('error', 'Invalid email or password');
   }

@@ -38,7 +38,7 @@ $cancel = function ($id) {
         <p class="text-slate-500">QTY</p>
         <p class="text-2xl">{{ $order->quantity }}</p>
         <p class="text-slate-500">Total</p>
-        <p class="text-2xl">{{ number_format($order->product->price * $order->quantity) }}</p>
+        <p class="text-2xl">{{ number_format($order->product->price * $order->quantity + $order->shipment->price) }}</p>
         @if($order->status == 0)
         @else
         <p class="mb-3">Bukti Pembayaran :</p>

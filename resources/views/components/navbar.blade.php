@@ -40,7 +40,9 @@ $logout = function () {
           <x-button label="Welcome, {{ Auth::user()->name }}" icon="o-user" class="btn-ghost btn-sm" responsive />
         </x-slot:trigger>
 
+        @can('admin')
         <x-menu-item title="Dashboard" icon="o-home" class="text-slate-700 hover:text-slate-900" :link="route('dashboard')" />
+        @endcan
         <x-menu-item title="My Orders" icon="o-shopping-bag" class="text-slate-700 hover:text-slate-900" :link="route('my-order')" />
         <x-menu-separator />
         <x-menu-item title="Logout" icon="o-arrow-right-on-rectangle" class="text-slate-700 hover:text-slate-900" wire:click="logout" />

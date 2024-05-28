@@ -3,7 +3,7 @@ use function Livewire\Volt\{with, state, usesPagination, usesFileUploads, rules}
 use App\Models\Order;
 usesPagination();
 usesFileUploads();
-state(['order', 'image',
+state(['order', 'image', 'shipments', 'shipment',
   'headers' => [
     ['key' => 'id', 'label' => '#', 'class' => 'bg-red-500/20 w-1'],
     ['key' => 'image', 'label' => 'Image', 'class' => 'h-20 w-full md:h-full md:w-20'],
@@ -13,10 +13,12 @@ state(['order', 'image',
     ['key' => 'total', 'label' => 'Total', 'class' => 'truncate'],
   ],
 ]);
-with(fn () => ['orders' => Order::with('product')->where('user_id', auth()->user()->id)->where('order_number', $this->order->order_number)->paginate(10)]);
+with(fn () => ['orders' => Order::with('product', 'shipment')->where('user_id', auth()->user()->id)->where('order_number', $this->order->order_number)->paginate(10)]);
 rules([
+  'shipment' => 'required',
   'image' => 'image|file|max:1024',
 ])->messages([
+  'shipment.required' => 'Shipment is required',
   'image.image' => 'Image must be an image',
   'image.file' => 'Image must be an image',
   'image.max' => 'Image must be less than 1MB',
@@ -57,11 +59,15 @@ $payment = function () {
         {{ number_format($order->product->price) }}
         @endscope
         @scope('cell_total', $order)
-        {{ number_format($order->product->price * $order->quantity) }}
+        <p class="text-slate-500 text-sm">{{ $order->shipment->name }}</p>
+        {{ number_format($order->product->price * $order->quantity + $order->shipment->price) }}
         @endscope
       </x-table>
       <div class="text-center">
-        <p>Silahkan membayar sebesar : {{ number_format($orders->sum('total')) }} ke rekening yang anda pilih dibawah</p>
+        <p>Total Bayar</p>
+        <p class="text-2xl py-3">
+          {{ number_format($orders->first()->product->price * $orders->first()->quantity + $orders->first()->shipment->price) }}
+        </p>
         <p>
           <span>Nama bank : {{ $orders->first()->payment->name }}</span> <br>
           <span>Atas nama : {{ $orders->first()->payment->of_name }}</span> <br>

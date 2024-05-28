@@ -1,25 +1,38 @@
 <?php
-use function Livewire\Volt\{state, with, rules};
+use function Livewire\Volt\{state, with, rules, mount};
 use App\Models\Order;
 use App\Models\Cart;
 use App\Models\Payment;
-state(['cart', 'name', 'no_whatsapp', 'address', 'payment']);
+use App\Models\Shipment;
+state(['cart', 'name', 'no_whatsapp', 'address', 'payment', 'shipment', 'shipments'
+]);
+mount(function () {
+  $this->name = auth()->user()->name;
+  $this->no_whatsapp = auth()->user()->no_whatsapp;
+  $this->address = auth()->user()->address;
+  $this->shipments = Shipment::all();
+});
 with(fn () => ['payments' => Payment::all()]);
 rules([
   'name' => 'required|min:3',
   'no_whatsapp' => 'required',
   'address' => 'required',
+  'shipment' => 'required',
+  'payment' => 'required',
 ])->messages([
   'name.required' => 'Name is required',
   'name.min' => 'Name must be at least 3 characters',
   'no_whatsapp.required' => 'No. WhatsApp is required',
   'address.required' => 'Address is required',
+  'shipment.required' => 'Shipment is required',
+  'payment.required' => 'Payment is required',
 ]);
 $checkout = function ($id) {
   $validatedData = $this->validate();
   $validatedData['user_id'] = auth()->user()->id;
   $validatedData['product_id'] = $id;
   $validatedData['payment_id'] = $this->payment;
+  $validatedData['shipment_id'] = $this->shipment;
   $validatedData['order_number'] = Str::random(12);
   $validatedData['quantity'] = $this->cart->quantity;
   $validatedData['total'] = $this->cart->total;
@@ -37,6 +50,7 @@ $checkout = function ($id) {
         <x-input label="Nama Penerima" wire:model="name" />
         <x-input label="No. WhatsApp" type="number" wire:model="no_whatsapp" />
         <x-textarea label="Alamat" wire:model="address" placeholder="Alamat lengkap ..." rows="5" />
+        <x-select label="Jasa Kirim" :options="$shipments" wire:model="shipment" placeholder="Pilih jasa pengiriman ..." />
         <x-select label="Pembayaran" :options="$payments" wire:model="payment" placeholder="Pilih metode pembayaran ..." />
 
         <x-slot:actions>

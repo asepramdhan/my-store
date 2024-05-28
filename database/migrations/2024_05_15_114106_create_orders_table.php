@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('product_id');
             $table->foreignId('payment_id');
+            $table->foreignId('shipment_id');
             $table->string('order_number')->unique();
             $table->string('quantity');
             $table->string('total');

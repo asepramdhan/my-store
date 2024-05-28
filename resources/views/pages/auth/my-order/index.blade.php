@@ -4,7 +4,7 @@ use function Laravel\Folio\name;
 use App\Models\Order;
 name('my-order');
 usesPagination();
-with(fn () => ['orders' => Order::with('product')->where('user_id', auth()->user()->id)->paginate(10)]);
+with(fn () => ['orders' => Order::with('product', 'shipment')->where('user_id', auth()->user()->id)->paginate(10)]);
 state(['headers' => [
     ['key' => 'id', 'label' => '#', 'class' => 'bg-red-500/20 w-1'],
     ['key' => 'image', 'label' => 'Image', 'class' => 'h-20 w-full md:h-full md:w-20'],
@@ -46,7 +46,8 @@ on(['orders' => function () {
       {{ number_format($order->product->price) }}
       @endscope
       @scope('cell_total', $order)
-      {{ number_format($order->product->price * $order->quantity) }}
+      <p class="text-slate-500 text-sm">{{ $order->shipment->name }}</p>
+      {{ number_format($order->product->price * $order->quantity + $order->shipment->price) }}
       @endscope
       @scope('cell_status', $order)
       @if($order->status == 0)
