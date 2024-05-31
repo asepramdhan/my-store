@@ -17,6 +17,7 @@ $cancel = function ($id) {
 ?>
 <x-dashboard-layout title="Detail Order">
   @volt
+  @dd($order)
   <div>
     <x-header title="Detail Order" subtitle="Order #{{ $order->order_number }}" size="text-xl" separator />
     {{-- image product --}}

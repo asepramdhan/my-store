@@ -41,7 +41,7 @@ on(['categories' => function () {
       @endscope
       @scope('actions', $category)
       <div class="flex gap-2">
-        <x-button icon="o-pencil" class="btn-sm" link="/auth/category/edit/{{ $category->slug }}" />
+        <x-button icon="o-pencil" class="btn-sm" link="/auth/admin/category/edit/{{ $category->slug }}" />
         <x-button icon="o-trash" wire:click="delete({{ $category->id }})" wire:confirm="Are you sure?" class="btn-sm" />
       </div>
       @endscope

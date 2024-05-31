@@ -58,8 +58,8 @@ on(['products' => function () {
       @endscope
       @scope('actions', $product)
       <div class="flex gap-2">
-        <x-button icon="o-eye" class="btn-sm" link="/auth/products/show/{{ $product->slug }}" />
-        <x-button icon="o-pencil" class="btn-sm" link="/auth/products/edit/{{ $product->slug }}" />
+        <x-button icon="o-eye" class="btn-sm" link="/auth/admin/products/show/{{ $product->slug }}" />
+        <x-button icon="o-pencil" class="btn-sm" link="/auth/admin/products/edit/{{ $product->slug }}" />
         <x-button icon="o-trash" wire:click="delete({{ $product->id }})" wire:confirm='Are you sure?' class="btn-sm" />
       </div>
       @endscope

@@ -22,7 +22,7 @@ $cancel = function ($id) {
     {{-- image product --}}
     <image src="{{ asset('storage/' . $order->product->image) }}" alt="{{ $order->product->name }}" class="w-32 h-32" />
     <x-card :title="$order->product->name" :subtitle="$order->created_at->diffForHumans()" shadow separator>
-      <p class="text-slate-500">Pembeli : ramdan</p>
+      <p class="text-slate-500">Pembeli : {{ $order->user->name }}</p>
       @if($order->status == 0)
       <span class="text-red-500 truncate">Belum Bayar</span>
       @elseif($order->status == 1)

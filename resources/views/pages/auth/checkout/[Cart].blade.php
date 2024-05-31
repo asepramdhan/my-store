@@ -30,7 +30,7 @@ rules([
 $checkout = function ($id) {
   $validatedData = $this->validate();
   $validatedData['user_id'] = auth()->user()->id;
-  $validatedData['product_id'] = $id;
+  $validatedData['product_id'] = $this->cart->product_id;
   $validatedData['payment_id'] = $this->payment;
   $validatedData['shipment_id'] = $this->shipment;
   $validatedData['order_number'] = Str::random(12);

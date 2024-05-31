@@ -9,11 +9,6 @@ class Order extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-    // relasi ke product
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
     // relasi ke payment
     public function payment()
     {
@@ -28,5 +23,10 @@ class Order extends Model
     public function shipment()
     {
         return $this->belongsTo(Shipment::class);
+    }
+    // relasi ke product
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

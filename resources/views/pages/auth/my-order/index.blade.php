@@ -21,7 +21,7 @@ Order::find($id)->update(['status' => 4]);
 $this->dispatch('orders');
 };
 on(['orders' => function () {
-  $this->orders = Order::where('user_id', auth()->user()->id)->get();
+  $this->orders = Order::with('product', 'shipment')->where('user_id', auth()->user()->id)->paginate(10);
 }])
 ?>
 <x-dashboard-layout title="My Order">
@@ -51,14 +51,19 @@ on(['orders' => function () {
       @endscope
       @scope('cell_status', $order)
       @if($order->status == 0)
+      <p class="text-slate-500 text-sm">{{ $order->payment->name }}</p>
       <span class="text-red-500 truncate">Belum Bayar</span>
       @elseif($order->status == 1)
+      <p class="text-slate-500 text-sm">{{ $order->payment->name }}</p>
       <span class="text-green-400 truncate">Menunggu Konfirmasi</span>
       @elseif($order->status == 2)
+      <p class="text-slate-500 text-sm">{{ $order->payment->name }}</p>
       <span class="text-green-600 truncate">Sedang Diproses</span>
       @elseif($order->status == 3)
+      <p class="text-slate-500 text-sm">{{ $order->payment->name }}</p>
       <span class="text-green-800 truncate">Dikirim</span>
       @elseif($order->status == 4)
+      <p class="text-slate-500 text-sm">{{ $order->payment->name }}</p>
       <span class="text-red-800 truncate">Dibatalkan</span>
       @endif
       @endscope
@@ -67,14 +72,16 @@ on(['orders' => function () {
       <div class="flex gap-2">
         @if($order->status == 0)
         <x-button label='Bayar' class="btn-sm" link="/auth/payment/{{ $order->order_number }}" />
+        <x-button label='Batalkan' wire:click="cancel({{ $order->id }})" wire:confirm='Are you sure?' class="btn-sm btn-error" />
+        @endif
+        @if($order->status == 2)
+        <x-button label='Batalkan' wire:click="cancel({{ $order->id }})" wire:confirm='Are you sure?' class="btn-sm btn-error" disabled />
         @endif
         @if($order->status == 3)
         <x-button label='Tracking' class="btn-sm btn-ghost" link="/auth/tracking/{{ $order->order_number }}" />
         <x-button label='Batalkan' wire:click="cancel({{ $order->id }})" wire:confirm='Are you sure?' class="btn-sm btn-error" disabled />
         @elseif($order->status == 4)
         <x-button label='Detail' link="/auth/my-order/{{ $order->order_number }}" class="btn-sm btn-ghost" />
-        @else
-        <x-button label='Batalkan' wire:click="cancel({{ $order->id }})" wire:confirm='Are you sure?' class="btn-sm btn-error" />
         @endif
       </div>
       @endscope

@@ -50,7 +50,8 @@ on(['orders' => function () {
       {{ number_format($order->product->price) }}
       @endscope
       @scope('cell_total', $order)
-      {{ number_format($order->product->price * $order->quantity) }}
+      <p class="text-slate-500 text-sm">{{ $order->shipment->name }}</p>
+      {{ number_format($order->product->price * $order->quantity + $order->shipment->price) }}
       @endscope
       @scope('cell_status', $order)
       @if($order->status == 0)
@@ -60,6 +61,7 @@ on(['orders' => function () {
       @elseif($order->status == 2)
       <span class="text-green-600 truncate">Sedang Diproses</span>
       @elseif($order->status == 3)
+      <p class="text-slate-500 text-sm">{{ $order->payment->name }}</p>
       <span class="text-green-800 truncate">Dikirim</span>
       @elseif($order->status == 4)
       <span class="text-red-800 truncate">Dibatalkan</span>
@@ -68,7 +70,7 @@ on(['orders' => function () {
 
       @scope('cell_actions', $order)
       <div class="flex gap-2">
-        <x-button label='Detail' class="btn-sm" link="/auth/orders/detail/{{ $order->order_number }}" />
+        <x-button label='Detail' class="btn-sm" link="/auth/admin/orders/detail/{{ $order->order_number }}" />
         <x-button label='Cancel' wire:click="cancel({{ $order->id }})" wire:confirm='Are you sure?' class="btn-sm" />
       </div>
       @endscope

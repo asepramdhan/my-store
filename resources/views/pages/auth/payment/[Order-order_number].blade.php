@@ -15,10 +15,8 @@ state(['order', 'image', 'shipments', 'shipment',
 ]);
 with(fn () => ['orders' => Order::with('product', 'shipment')->where('user_id', auth()->user()->id)->where('order_number', $this->order->order_number)->paginate(10)]);
 rules([
-  'shipment' => 'required',
   'image' => 'image|file|max:1024',
 ])->messages([
-  'shipment.required' => 'Shipment is required',
   'image.image' => 'Image must be an image',
   'image.file' => 'Image must be an image',
   'image.max' => 'Image must be less than 1MB',
@@ -80,7 +78,7 @@ $payment = function () {
           <x-file wire:model="image" hint="Unggah bukti pembayaran" />
         </div>
         <div class="flex justify-center my-3">
-          <x-button label="Bayar" type="submit" icon="o-credit-card" class="btn-sm btn-primary" />
+          <x-button label="Bayar" type="submit" icon="o-credit-card" class="btn-sm btn-primary" spinner="payment" />
         </div>
       </x-form>
       @endif
