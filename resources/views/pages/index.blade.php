@@ -48,7 +48,7 @@ $cart = function ($id) {
           <x-button wire:click="cart({{ $product->id }})" icon-right="o-shopping-cart" class="btn-ghost btn-circle btn-sm" />
         </x-slot:menu>
         <x-slot:actions>
-          <x-button label="Beli Sekarang" wire:click="beli_sekarang" icon-right="o-shopping-bag" class="btn-block btn-primary btn-sm my-2" spinner="beli_sekarang" />
+          <x-button label="Beli Sekarang" link="/auth/checkout/{{ $product->id }}" icon-right="o-shopping-bag" class="btn-block btn-primary btn-sm my-2" />
         </x-slot:actions>
       </x-card>
       @endforeach

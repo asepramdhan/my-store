@@ -9,6 +9,8 @@
     @endcan
     @can('admin')
     <x-menu-item title="Products" icon="o-shopping-cart" :link="route('products')" />
+    <x-menu-separator />
+    <x-menu-item title="Users" icon="o-users" :link="route('users')" />
     <x-menu-item title="Categories" icon="o-tag" :link="route('category')" />
     @endcan
   </x-menu>

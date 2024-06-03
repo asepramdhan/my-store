@@ -2,6 +2,7 @@
 use function Livewire\Volt\{with, state, usesPagination};
 use function Laravel\Folio\name;
 use App\Models\Cart;
+use App\Models\Checkout;
 usesPagination();
 with(fn () => ['carts' => Cart::with('product')->where('user_id', auth()->user()->id)->paginate(10)]);
 name('carts');
@@ -53,14 +54,10 @@ $delete = function ($id) {
         @scope('actions', $cart)
         <div class="flex gap-2">
           <x-button icon="o-trash" wire:click="delete({{ $cart->id }})" wire:confirm='Are you sure?' class="btn-sm" />
-          <x-button icon="o-shopping-cart" class="btn-sm" link="/auth/checkout/{{ $cart->id }}" />
+          <x-button icon="o-shopping-cart" class="btn-sm" link="/auth/checkout/cart/{{ $cart->id }}" />
         </div>
         @endscope
       </x-table>
-      <div class="flex justify-between my-3">
-        <div>Total : {{ number_format($carts->sum('total')) }}</div>
-        <x-button label="Checkout Semua" icon="o-shopping-cart" class="btn-sm btn-primary" :link="route('checkout')" />
-      </div>
       @endif
     </div>
   </div>
