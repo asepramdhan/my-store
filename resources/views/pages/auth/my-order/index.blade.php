@@ -74,6 +74,9 @@ on(['orders' => function () {
         <x-button label='Bayar' class="btn-sm" link="/auth/payment/{{ $order->order_number }}" />
         <x-button label='Batalkan' wire:click="cancel({{ $order->id }})" wire:confirm='Are you sure?' class="btn-sm btn-error" />
         @endif
+        @if($order->status == 1)
+        <x-button label='Batalkan' wire:click="cancel({{ $order->id }})" wire:confirm='Are you sure?' class="btn-sm btn-error" />
+        @endif
         @if($order->status == 2)
         <x-button label='Batalkan' wire:click="cancel({{ $order->id }})" wire:confirm='Are you sure?' class="btn-sm btn-error" disabled />
         @endif

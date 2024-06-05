@@ -16,7 +16,7 @@ $delete = function ($id) {
   <div>
     <h4 class="text-2xl mb-3">{{ $product->name }}</h4>
     <x-button label="Back to Products" :link="route('products')" icon="o-arrow-left" class="btn-sm btn-success me-1" />
-    <x-button label="Edit" link="/auth/products/edit/{{ $product->slug }}" icon="o-pencil" class="btn-sm btn-warning me-1" />
+    <x-button label="Edit" link="/auth/admin/products/edit/{{ $product->slug }}" icon="o-pencil" class="btn-sm btn-warning me-1" />
     <x-button label="Delete" icon="o-trash" wire:click='delete({{ $product->id }})' wire:confirm='Are you sure?' class="btn-sm btn-error" />
     <img src="{{ asset('storage/' . $product->image) }}" class="h-96 rounded-lg my-5" />
     {!! $product->description !!}

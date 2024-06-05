@@ -1,12 +1,9 @@
 <?php
 use function Livewire\Volt\{state, with};
-use function Laravel\Folio\name;
 use App\Models\Product;
-use App\Models\Order;
 use App\Models\Cart;
-name('home');
-state([]);
-with(fn () => ['products' => Product::all()]);
+state(['product']);
+with(fn () => ['products' => Product::take(6)->get()]);
 $cart = function ($id) {
   // buat fungsi jika user klik cart tapi belum login
   if (! auth()->check()) {
@@ -25,16 +22,25 @@ $cart = function ($id) {
         'quantity' => 1,
         'total' => Product::find($id)->price,
       ]);
-      $this->redirect(route('home'), navigate: true);
+      $this->redirect(route('carts'), navigate: true);
     }
   }
 };
 ?>
-<x-app-layout title="Home">
+<x-app-layout title="{{ $product->name }}">
   @volt
-  <div>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      @foreach ($products as $product)
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    <div class="col-span-1 md:col-span-3">
+      <h4 class="text-2xl mb-3">{{ $product->name }}</h4>
+      <img src="{{ asset('storage/' . $product->image) }}" class="h-auto rounded-lg my-5" />
+      <div class="mb-3">
+        <x-button label="Masuk keranjang" wire:click="cart({{ $product->id }})" icon-right="o-shopping-cart" class="btn-block btn-ghost mb-2 btn-sm" />
+        <x-button label="Beli Sekarang" link="/auth/checkout/{{ $product->id }}" icon-right="o-shopping-bag" class="btn-block btn-primary btn-sm" />
+      </div>
+      {!! $product->description !!}
+    </div>
+    <div class="...">
+      @foreach ($products->where('slug', '!=', $this->product->slug) as $product)
       <x-card>
         <x-slot:title class="text-sm">
           <a href="/show/{{ $product->slug }}" wire:navigate>{{ $product->name }}</a>
